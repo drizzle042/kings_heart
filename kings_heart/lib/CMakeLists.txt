@@ -1,0 +1,18 @@
+target_sources(
+    ${PROJECT_NAME} 
+    PUBLIC
+    Header.hpp
+    Header.cpp
+    HttpInput.hpp
+    HttpInput.cpp
+    HttpOutput.hpp
+    HttpOutput.cpp
+    Log.tpp
+    Log.hpp
+    Message.hpp
+    Message.cpp
+    Payload.hpp
+    Payload.cpp
+    Tokenizer.cpp
+    Tokenizer.hpp
+)
