@@ -5,7 +5,7 @@
 #include <drogon/utils/FunctionTraits.h>
 #include "HttpInput.hpp"
 #include "AuthenticationController.hpp"
-#include "HttpOutput.hpp"
+#include "AbstractHttpOutput.hpp"
 
 
 class SigninView : public drogon::HttpController<SigninView>

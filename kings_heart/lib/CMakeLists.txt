@@ -1,18 +1,8 @@
-target_sources(
-    ${PROJECT_NAME} 
-    PUBLIC
-    Header.hpp
-    Header.cpp
-    HttpInput.hpp
-    HttpInput.cpp
-    HttpOutput.hpp
-    HttpOutput.cpp
-    Log.tpp
-    Log.hpp
-    Message.hpp
-    Message.cpp
-    Payload.hpp
-    Payload.cpp
-    Tokenizer.cpp
-    Tokenizer.hpp
-)
+add_subdirectory(BagIt)
+add_subdirectory(Command)
+add_subdirectory(Cryptography)
+add_subdirectory(File)
+add_subdirectory(IO)
+add_subdirectory(Log)
+add_subdirectory(PayloadSerializers)
+add_subdirectory(Registry)

@@ -1,0 +1,4 @@
+add_subdirectory(Message)
+add_subdirectory(MetaDatum)
+add_subdirectory(Payload)
+add_subdirectory(PayloadBuilder)

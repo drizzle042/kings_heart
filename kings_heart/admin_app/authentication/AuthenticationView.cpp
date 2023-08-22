@@ -7,11 +7,11 @@ void SigninView::signin(
     std::function<void (const drogon::HttpResponsePtr&)>&& responder
 ) const
 {
-    HttpInput input{request};
-    input.add_required_message_keys({"email", "password"});
+    Payload req = HttpInput{request}
+                    .add_required_message_keys({"email", "password"})
+                    .get_input();
 
-    SigninCommand signinCommand{input.get_input()};
-    Payload resp = signinCommand.execute();
+    Payload resp = SigninCommand{req}.execute();
 
-    responder(HttpOutput(resp).get_output());
+    responder(AbstractHttpOutput{resp}.get_output());
 };

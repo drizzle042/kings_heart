@@ -1,4 +1,6 @@
 .vscode
 build/
+uploads/
+system_recovery/
 /CMakeLists.txt
-server.cpp
+/server.cpp
