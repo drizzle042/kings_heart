@@ -2,5 +2,7 @@
 build/
 uploads/
 system_recovery/
+Testing/
 /CMakeLists.txt
 /server.cpp
+.env

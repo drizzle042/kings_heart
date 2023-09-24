@@ -2,71 +2,58 @@
 
 namespace KingsHeart
 {
-    HttpInput::HttpInput(drogon::HttpRequestPtr requestPtr)
-    : _requestPtr{requestPtr} {}
+    HttpInput::HttpInput(HttpRequest request)
+    : _request{request} {}
 
-
-    HttpInput& HttpInput::add_required_meta_datum_key(std::string&& requiredMetaDatumKey)
+    HttpInput& HttpInput::add_required_meta_datum_keys(const std::vector<std::string>& requiredMetaDatumKeys)
     { 
-        this->_payloadBuilder.add_required_meta_datum_key(std::move(requiredMetaDatumKey));
+        this->_payloadBuilder.add_required_meta_data(requiredMetaDatumKeys);
         return *this;
     }
 
-    HttpInput& HttpInput::add_required_meta_datum_keys(std::unordered_set<std::string>&& requiredMetaDatumKeys)
+    HttpInput& HttpInput::add_required_message_keys(const std::vector<std::string>& requiredMsgKeys)
     { 
-        this->_payloadBuilder.add_required_meta_datum_keys(std::move(requiredMetaDatumKeys));
-        return *this;
-    }
-
-
-    HttpInput& HttpInput::add_required_message_key(std::string&& requiredMsgKey)
-    { 
-        this->_payloadBuilder.add_required_message_key(std::move(requiredMsgKey));
-        return *this;
-    }
-
-    HttpInput& HttpInput::add_required_message_keys(std::unordered_set<std::string>&& requiredMsgKeys)
-    { 
-        this->_payloadBuilder.add_required_message_keys(std::move(requiredMsgKeys));
+        this->_payloadBuilder.add_required_messages(requiredMsgKeys);
         return *this;
     }
 
 
-    Payload HttpInput::get_input()
+    const Payload& HttpInput::get_input()
     {
-        if (this->_payload == nullptr)
+        if (!this->_payload)
         {
-            auto requestMetaData = _requestPtr->getHeaders();
-            for (const auto requestMetaDatum : requestMetaData)
-            {
-                this->_payloadBuilder.add_meta_datum(MetaDatum(requestMetaDatum.first, requestMetaDatum.second));
-            }
+            for (const auto& requestMetaDatum : this->_request->getHeaders())
+            { this->_payloadBuilder.add_meta_datum(requestMetaDatum.first, MetaDatum{requestMetaDatum.second}); }
 
-            auto requestParams = _requestPtr->getParameters();
-            for (const auto requestParam : requestParams)
-            {
-                this->_payloadBuilder.add_message(Message(requestParam.first, requestParam.second));
-            }
+            for (const auto& requestParam : this->_request->getParameters())
+            { this->_payloadBuilder.add_meta_datum(requestParam.first, MetaDatum{requestParam.second}); }
 
-            const std::string contentType = _requestPtr->getHeader("Content-Type");
+            drogon::ContentType _c = this->_request->getContentType();
+            std::shared_ptr<Json::Value> requestJson;
+            std::string_view requestBody;
 
-            if (contentType == "application/json")
+            switch(_c)
             {
-                const std::shared_ptr<Json::Value> requestJson = _requestPtr->getJsonObject();
+            case drogon::ContentType::CT_APPLICATION_JSON:
+
+                requestJson = this->_request->getJsonObject();
                 for (const auto& key : requestJson->getMemberNames())
-                { this->_payloadBuilder.add_message(Message(key, (*requestJson)[key].asString())); }
-            }
+                { this->_payloadBuilder.add_message(key, Message{(*requestJson)[key].asString()}); }
 
-            if (
-                (contentType == "application/xml") || 
-                (contentType == "text/csv") || 
-                (contentType == "text/html") ||
-                (contentType == "text/xml") ||
-                (contentType == "text/plain") 
-            )
-            {
-                const std::string_view requestBody = _requestPtr->getBody();
-                this->_payloadBuilder.add_message(Message("message", std::string(requestBody)));
+                break;
+
+            case drogon::ContentType::CT_APPLICATION_XML:
+            case drogon::ContentType::CT_TEXT_XML:
+            case drogon::ContentType::CT_TEXT_HTML:
+            case drogon::ContentType::CT_TEXT_PLAIN:
+
+                requestBody = this->_request->getBody();
+                this->_payloadBuilder.add_message("message", Message{std::string(requestBody)});
+
+                break;
+
+            default:
+                break;
             }
 
             this->_payload = std::make_shared<Payload>(this->_payloadBuilder.build());

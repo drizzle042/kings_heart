@@ -4,24 +4,21 @@
 namespace KingsHeart
 {
     JsonHttpOutput::JsonHttpOutput(const Payload& payload)
-    : _payload(payload){}
+    : _payload{std::shared_ptr<Payload>{const_cast<Payload*>(&payload)}} {}
 
-    drogon::HttpResponsePtr JsonHttpOutput::get_output()
+    HttpResponse& JsonHttpOutput::get_output()
     {
-        if (this->_httpResponsePtr == nullptr)
+        if (this->_httpResponse == nullptr)
         {
             Json::Value json;
-            for (const auto msg : this->_payload.get_messages())
-            {
-                json[msg->get_key()] = msg->get_value();
-            }
-            this->_httpResponsePtr = drogon::HttpResponse::newHttpJsonResponse(json);
+            for (const auto& msg : this->_payload->get_messages())
+            { json[msg.first] = msg.second.read(); }
 
-            for (const auto metaDatum : this->_payload.get_meta_data())
-            {
-                this->_httpResponsePtr->addHeader(metaDatum->get_key(), metaDatum->get_value());
-            }
+            this->_httpResponse = drogon::HttpResponse::newHttpJsonResponse(json);
+
+            for (const auto& metaDatum : this->_payload->get_meta_data())
+            { this->_httpResponse->addHeader(metaDatum.first, metaDatum.second.read()); }
         }
-        return this->_httpResponsePtr;
+        return this->_httpResponse;
     }
 }

@@ -1,4 +1,5 @@
-#pragma once
+#ifndef MainLog_H
+#define MainLog_H
 
 #include <string>
 #include <stdexcept>
@@ -9,7 +10,9 @@ namespace KingsHeart
     class MainLog
     {
     private:
-        MainLog() =default;
+        MainLog() =delete;
+        static Logger _logger;
+        static void _set_logger();
 
     public:
         static void trace(const std::string&);
@@ -20,3 +23,5 @@ namespace KingsHeart
         static void critical(const std::string&);
     };
 }
+
+#endif

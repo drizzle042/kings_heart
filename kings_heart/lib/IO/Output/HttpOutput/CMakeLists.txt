@@ -1,3 +1,3 @@
-add_subdirectory(AbstractHttpOutput)
+add_subdirectory(HttpOutput)
 add_subdirectory(HtmlHttpOutput)
 add_subdirectory(JsonHttpOutput)

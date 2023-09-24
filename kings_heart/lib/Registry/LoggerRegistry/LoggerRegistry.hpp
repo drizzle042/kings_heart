@@ -7,12 +7,14 @@
 
 namespace KingsHeart
 {
+    using Logger = std::shared_ptr<spdlog::logger>;
+
     class LoggerRegistry
     {
     private:
-        LoggerRegistry() =default;
+        LoggerRegistry() =delete;
 
     public:
-        static std::shared_ptr<spdlog::logger> get_logger(const std::string&);
+        static Logger get_logger(const std::string&);
     };
 }

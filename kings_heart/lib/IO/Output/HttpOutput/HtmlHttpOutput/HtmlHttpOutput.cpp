@@ -1,31 +1,27 @@
 #include "HtmlHttpOutput.hpp"
-#include "MainLog.hpp"
 
 
 namespace KingsHeart
 {
-    HtmlHttpOutput::HtmlHttpOutput(const Payload& payload, File&& file)
-    : _payload{payload}, _file{std::move(file)} {}
+    HtmlHttpOutput::HtmlHttpOutput(const Payload& payload, File& file)
+    : _payload{std::make_shared<Payload>(payload)}, 
+      _file{&file} {}
 
-    drogon::HttpResponsePtr HtmlHttpOutput::get_output()
+    HttpResponse& HtmlHttpOutput::get_output()
     {
-        if (this->_httpResponsePtr == nullptr)
+        if (this->_httpResponse == nullptr)
         {
-            this->_httpResponsePtr = drogon::HttpResponse::newHttpResponse();
+            this->_httpResponse = drogon::HttpResponse::newHttpResponse();
 
-            for (const auto metaDatum : this->_payload.get_meta_data())
-            {
-                this->_httpResponsePtr->addHeader(metaDatum->get_key(), metaDatum->get_value());
-            }
+            for (auto& metaDatum : this->_payload->get_meta_data())
+            { this->_httpResponse->addHeader(metaDatum.first, metaDatum.second.read()); }
 
             inja::json json;
-            for (const auto msg : this->_payload.get_messages())
-            {
-                json[msg->get_key()] = msg->get_value();
-            }
+            for (auto& msg : this->_payload->get_messages())
+            { json[msg.first] = msg.second.read(); }
             
-            this->_httpResponsePtr->setBody(inja::render(this->_file.get_content(), json));
+            this->_httpResponse->setBody(inja::render(this->_file->get_text_content(), json));
         }
-        return this->_httpResponsePtr;
+        return this->_httpResponse;
     }
 }

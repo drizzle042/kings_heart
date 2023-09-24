@@ -3,14 +3,27 @@
 
 namespace KingsHeart
 {
+    Logger CommandStorage::_logger;
+
+    void CommandStorage::_set_logger()
+    {
+        if (CommandStorage::_logger == nullptr)
+        {
+            extern std::string get_env_var(const std::string&) noexcept(false);
+            extern std::string COMMAND_STORAGE_LOGGER;
+
+            std::string loggerName{get_env_var(COMMAND_STORAGE_LOGGER)};
+
+            CommandStorage::_logger = LoggerRegistry::get_logger(loggerName);
+
+            if (CommandStorage::_logger == nullptr)
+            { throw std::runtime_error(loggerName + " is not a logger on this program"); }
+        }        
+    }
+
     void CommandStorage::store(const std::string& msg)
     {
-        auto commandStorageLogger = LoggerRegistry::get_logger("command_storage_logger");
-
-        if (!commandStorageLogger)
-        { throw std::runtime_error("command_storage_logger is not a logger on this program"); }
-        
-        commandStorageLogger->info(msg);
-        commandStorageLogger->flush();
+        CommandStorage::_set_logger();
+        CommandStorage::_logger->info(msg);
     }
 }

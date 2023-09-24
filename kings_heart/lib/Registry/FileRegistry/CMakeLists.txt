@@ -1,10 +1,24 @@
 target_include_directories(
-    ${PROJECT_NAME} 
-    PUBLIC
+    ${PROJECT_MAIN_TARGET} 
+    PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}
 )
 target_sources(
-    ${PROJECT_NAME} 
-    PUBLIC
+    ${PROJECT_MAIN_TARGET} 
+    PRIVATE
     FileRegistry.cpp
 )
+
+if(BUILD_TESTING)
+    target_include_directories(
+        FileRegistryTest
+        PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}
+    )
+    target_sources(
+        FileRegistryTest
+        PRIVATE
+        FileRegistry.cpp
+        FileRegistry.test.cpp
+    )
+endif()

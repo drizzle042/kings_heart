@@ -1,0 +1,5 @@
+target_include_directories(
+    ${PROJECT_MAIN_TARGET} 
+    PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}
+)

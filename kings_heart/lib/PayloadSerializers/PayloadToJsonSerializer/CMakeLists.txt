@@ -1,10 +1,24 @@
 target_include_directories(
-    ${PROJECT_NAME} 
-    PUBLIC
+    ${PROJECT_MAIN_TARGET} 
+    PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}
 )
 target_sources(
-    ${PROJECT_NAME} 
-    PUBLIC
+    ${PROJECT_MAIN_TARGET} 
+    PRIVATE
     PayloadToJsonSerializer.cpp
 )
+
+if(BUILD_TESTING)
+    target_include_directories(
+        PayloadToJsonSerializerTest
+        PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}
+    )
+    target_sources(
+        PayloadToJsonSerializerTest
+        PRIVATE
+        PayloadToJsonSerializer.cpp
+        PayloadToJsonSerializer.test.cpp
+    )
+endif()

@@ -1,10 +1,10 @@
 target_include_directories(
-    ${PROJECT_NAME} 
-    PUBLIC
+    ${PROJECT_MAIN_TARGET} 
+    PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}
 )
 target_sources(
-    ${PROJECT_NAME} 
-    PUBLIC
+    ${PROJECT_MAIN_TARGET} 
+    PRIVATE
     HttpInput.cpp
 )

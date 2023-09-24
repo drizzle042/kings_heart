@@ -1,26 +1,34 @@
 #include "AuthenticationController.hpp"
+#include "MainLog.hpp"
+
 
 namespace KingsHeart
 {
     SigninCommand::SigninCommand(const Payload& payload)
-    : _payload{payload}{}
+    : _payload{std::shared_ptr<Payload>{const_cast<Payload*>(&payload)}} {}
 
     Payload SigninCommand::execute()
     {
-        const Message* email = this->_payload.get_message_by_key("email");
-        const Message* password = this->_payload.get_message_by_key("password");
+        MainLog::trace("Admin Signin called...");
+
+        const Message* email = this->_payload->get_message("email");
+        const Message* password = this->_payload->get_message("password");
 
         JsonWebToken token{std::unordered_map<std::string, std::string>{
-            {email->get_key(), email->get_value()},
-            {password->get_key(), password->get_value()}
+            {"email", email->read()}
         }};
 
-        PayloadBuilder payloadBuilder;
-        payloadBuilder.add_messages({
-            Message{"status", "success"},
-            Message{"data", token.get_token()}
-        });
-        
-        return payloadBuilder.build();
+        extern std::string MAIN_DATABASE;
+        Database db = DatabaseRegistry::get_database(MAIN_DATABASE);
+
+        extern std::string MAIN_DATABASE_ADMIN_COLLECTION;
+        auto user = db.collection(MAIN_DATABASE_ADMIN_COLLECTION).find_one({});
+        std::string str_usr = bsoncxx::to_json(user.value());
+        MainLog::trace(str_usr);
+
+        return PayloadBuilder{}.add_message("status", Message{"success"})
+                               .add_message("token", Message{token.get_token()})
+                               .add_message("data", Message{str_usr})
+                               .build();
     }
 }

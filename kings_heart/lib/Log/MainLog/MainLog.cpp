@@ -1,52 +1,59 @@
 #include "MainLog.hpp"
 
+
 namespace KingsHeart
 {
+    Logger MainLog::_logger;
+
+    void MainLog::_set_logger()
+    {
+        if (MainLog::_logger == nullptr)
+        {
+            extern std::string get_env_var(const std::string&) noexcept(false);
+            extern std::string MAIN_LOGGER;
+
+            std::string loggerName{get_env_var(MAIN_LOGGER)};
+
+            MainLog::_logger = LoggerRegistry::get_logger(loggerName);
+
+            if (MainLog::_logger == nullptr)
+            { throw std::runtime_error(loggerName + " is not a logger on this program"); }
+        }
+    }
+
     void MainLog::trace(const std::string& msg)
     {
-        auto mainLogger = LoggerRegistry::get_logger("main_logger");
-        if (!mainLogger)
-        { throw std::runtime_error("main_logger is not a logger on this program"); }
-        mainLogger->trace(msg);
+        MainLog::_set_logger();
+        MainLog::_logger->trace(msg);
     }
 
     void MainLog::debug(const std::string& msg)
     {
-        auto mainLogger = LoggerRegistry::get_logger("main_logger");
-        if (!mainLogger)
-        { throw std::runtime_error("main_logger is not a logger on this program"); }
-        mainLogger->debug(msg);
+        MainLog::_set_logger();
+        MainLog::_logger->debug(msg);
     }
     
     void MainLog::info(const std::string& msg)
     {
-        auto mainLogger = LoggerRegistry::get_logger("main_logger");
-        if (!mainLogger)
-        { throw std::runtime_error("main_logger is not a logger on this program"); }
-        mainLogger->info(msg);
+        MainLog::_set_logger();
+        MainLog::_logger->info(msg);
     }
     
     void MainLog::warn(const std::string& msg)
     {
-        auto mainLogger = LoggerRegistry::get_logger("main_logger");
-        if (!mainLogger)
-        { throw std::runtime_error("main_logger is not a logger on this program"); }
-        mainLogger->warn(msg);
+        MainLog::_set_logger();
+        MainLog::_logger->warn(msg);
     }
     
     void MainLog::error(const std::string& msg)
     {
-        auto mainLogger = LoggerRegistry::get_logger("main_logger");
-        if (!mainLogger)
-        { throw std::runtime_error("main_logger is not a logger on this program"); }
-        mainLogger->error(msg);
+        MainLog::_set_logger();
+        MainLog::_logger->error(msg);
     }
     
     void MainLog::critical(const std::string& msg)
     {
-        auto mainLogger = LoggerRegistry::get_logger("main_logger");
-        if (!mainLogger)
-        { throw std::runtime_error("main_logger is not a logger on this program"); }
-        mainLogger->critical(msg);
+        MainLog::_set_logger();
+        MainLog::_logger->critical(msg);
     }
 }

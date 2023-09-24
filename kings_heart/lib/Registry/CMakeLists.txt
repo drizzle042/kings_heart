@@ -1,2 +1,3 @@
+add_subdirectory(DatabaseRegistry)
 add_subdirectory(FileRegistry)
 add_subdirectory(LoggerRegistry)

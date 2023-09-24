@@ -1,2 +1,3 @@
-add_subdirectory(IOInterfaces)
-add_subdirectory(SerializerInterfaces)
+add_subdirectory(Command)
+add_subdirectory(IO)
+add_subdirectory(Serializers)

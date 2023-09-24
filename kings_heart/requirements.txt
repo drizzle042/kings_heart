@@ -1,3 +1,0 @@
-drogon # Install from source
-cpp-jwt # Install from source
-spdlog # Install from repository

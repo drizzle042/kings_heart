@@ -1,22 +1,24 @@
-#pragma once
+#ifndef JsonHttpOutput_H
+#define JsonHttpOutput_H
 
-#include <drogon/HttpResponse.h>
+#include <memory>
 #include <jsoncpp/json/json.h>
 #include "Output.hpp"
-#include "Payload.hpp"
+#include "Bagit.hpp"
 
 
 namespace KingsHeart
 {
-    class JsonHttpOutput : public Output<drogon::HttpResponsePtr>
+    class JsonHttpOutput : public Output<HttpResponse>
     {
     private:
-        Payload _payload;
-        drogon::HttpResponsePtr _httpResponsePtr;
+        std::shared_ptr<Payload> _payload;
+        HttpResponse _httpResponse;
     
     public:
-        JsonHttpOutput(const Payload&);
-
-        drogon::HttpResponsePtr get_output() override;
+        explicit JsonHttpOutput(const Payload&);
+        HttpResponse& get_output() override;
     };
 }
+
+#endif

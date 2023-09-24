@@ -1,4 +1,5 @@
-#pragma once
+#ifndef CommandStorage_H
+#define CommandStorage_H
 
 #include <string>
 #include <stdexcept>
@@ -9,9 +10,13 @@ namespace KingsHeart
     class CommandStorage
     {
     private:
-        CommandStorage() =default;
+        CommandStorage() =delete;
+        static Logger _logger;
+        static void _set_logger();
 
     public:
         static void store(const std::string&);
     };
 }
+
+#endif
