@@ -1,24 +1,27 @@
-#ifndef JsonHttpOutput_H
-#define JsonHttpOutput_H
+#ifndef __JsonHttpOutput_H__
+#define __JsonHttpOutput_H__
 
 #include <memory>
-#include <jsoncpp/json/json.h>
+#include <nlohmann/json.hpp>
 #include "Output.hpp"
-#include "Bagit.hpp"
+#include "AdminBagit.hpp"
 
 
 namespace KingsHeart
 {
+    template<typename T>
     class JsonHttpOutput : public Output<HttpResponse>
     {
-    private:
-        std::shared_ptr<Payload> _payload;
-        HttpResponse _httpResponse;
-    
     public:
-        explicit JsonHttpOutput(const Payload&);
-        HttpResponse& get_output() override;
+        explicit JsonHttpOutput(const T&);
+        HttpResponse& operator()() override;
+
+    private:
+        const T* _payload;
+        HttpResponse _httpResponse;
     };
 }
+
+#include "JsonHttpOutput.tpp"
 
 #endif

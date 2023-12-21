@@ -13,7 +13,7 @@ namespace KingsHeart
             std::ofstream _testFile{"test2.txt"};
             _testFile << "The quick brown fox.";
             _testFile.close();
-            FileRegistry::add_file(File{"test2.txt"});
+            FileRegistry::add_file("test2.txt", File{"test2.txt"});
         };
     };
 
@@ -30,6 +30,8 @@ namespace KingsHeart
             {
                 EXPECT_TRUE(std::string(e.what()) == "test2.txt not found in the File Registry!");
                 throw;
-            }, std::runtime_error);
+            }, 
+            std::runtime_error
+        );
     }
 }

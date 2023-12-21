@@ -1,3 +1,6 @@
 add_subdirectory(Command)
+add_subdirectory(Cryptography)
+add_subdirectory(Database)
+add_subdirectory(Exception)
 add_subdirectory(IO)
-add_subdirectory(Serializers)
+add_subdirectory(Messenger)

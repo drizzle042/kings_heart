@@ -11,10 +11,10 @@ namespace KingsHeart
 
     class LoggerRegistry
     {
-    private:
-        LoggerRegistry() =delete;
-
     public:
         static Logger get_logger(const std::string&);
+
+    private:
+        LoggerRegistry() =delete;
     };
 }

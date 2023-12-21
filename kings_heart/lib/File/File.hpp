@@ -1,5 +1,5 @@
-#ifndef File_H
-#define File_H
+#ifndef __File_H__
+#define __File_H__
 
 #include <memory>
 #include <fstream>
@@ -11,22 +11,18 @@ namespace KingsHeart
 {
     class File
     {
+    public:
+        explicit File(const std::string&);
+
+        bool operator==(const File&) const;        
+        const std::string& get_file_name() const;
+        operator const std::string&() const;
+
     private:
         File() =delete;
         std::string _filename;
         std::fstream _fileStream;
-        std::shared_ptr<std::string> _textContent;
-        std::shared_ptr<std::vector<char>> _binaryContent;
-
-    public:
-        explicit File(const std::string&);
-
-        const bool operator == (const File&) const;
-        
-        const std::string& get_file_name() const;
-
-        const std::string& get_text_content();
-        const std::vector<char>& get_binary_content();
+        std::string _content;
     };
 }
 

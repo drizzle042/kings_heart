@@ -1,5 +1,5 @@
-#ifndef Output_H
-#define Output_H
+#ifndef __Output_H__
+#define __Output_H__
 
 #include <drogon/HttpResponse.h>
 
@@ -12,7 +12,7 @@ namespace KingsHeart
     class Output
     {
     public:
-        virtual const T& get_output() =0;
+        virtual T& operator()() =0;
     };
 }
 

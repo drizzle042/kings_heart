@@ -6,6 +6,7 @@ target_include_directories(
 target_sources(
     ${PROJECT_MAIN_TARGET} 
     PRIVATE
-    Objects.cpp
+    Functions.cpp
     LoadEnv.cpp
+    Objects.cpp
 )

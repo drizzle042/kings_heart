@@ -1,0 +1,3 @@
+add_subdirectory(GenerateOTP)
+add_subdirectory(GenerateToken)
+add_subdirectory(ResetPassword)

@@ -1,15 +1,14 @@
-#ifndef Command_H
-#define Command_H
-
-#include "Bagit.hpp"
+#ifndef __Command_H__
+#define __Command_H__
 
 
 namespace KingsHeart
 {
+    template<typename T>
     class Command
     {
     public:
-        virtual Payload execute() =0;
+        virtual const T& operator()() =0;
     };
 }
 

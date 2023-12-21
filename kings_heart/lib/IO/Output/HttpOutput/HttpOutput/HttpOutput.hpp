@@ -1,29 +1,33 @@
-#ifndef HttpOutput_H
-#define HttpOutput_H
+#ifndef __HttpOutput_H__
+#define __HttpOutput_H__
 
 #include <memory>
-#include "Bagit.hpp"
+#include <string>
+#include "Functions.hpp"
+#include "Enums.hpp"
 #include "Output.hpp"
-#include "File.hpp"
+#include "CborHttpOutput.hpp"
 #include "JsonHttpOutput.hpp"
 #include "HtmlHttpOutput.hpp"
+#include "FileRegistry.hpp"
+#include "File.hpp"
 
 
 namespace KingsHeart
 {
+    template<typename T>
     class HttpOutput : public Output<HttpResponse>
     {
-    private:
-        std::shared_ptr<Payload> _payload;
-        std::shared_ptr<Output<HttpResponse>> _outputFormat;
-
     public:
-        HttpOutput(const Payload&);
+        explicit HttpOutput(const T&, HTTP_OUTPUT);
+        explicit HttpOutput(const T&, HTTP_OUTPUT, const File&);
+        HttpResponse& operator()() override;
 
-        HttpOutput& set_output_format(const Output<HttpResponse>&);
-        HttpOutput& set_output_format(const MetaDatum&, const File&);
-        const HttpResponse& get_output() override;
+    private:
+        std::shared_ptr<Output<HttpResponse>> __outputFormat;
     };
 }
+
+#include "HttpOutput.tpp"
 
 #endif

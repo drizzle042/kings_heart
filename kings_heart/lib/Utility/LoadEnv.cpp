@@ -3,9 +3,9 @@
 namespace KingsHeart
 {
     void LoadEnv::init(const char* filename)
-    { LoadEnv::do_init(OptionsNone, filename); }
+    { LoadEnv::do_init(LoadEnv::OptionsNone, filename); }
 
-    void LoadEnv::init(int flags, const char* filename)
+    void LoadEnv::init(unsigned short flags, const char* filename)
     { LoadEnv::do_init(flags, filename); }
 
     #ifdef _MSC_VER
@@ -118,7 +118,7 @@ namespace KingsHeart
         return std::make_pair(resolved,(nvar == 0));
     }
 
-    void LoadEnv::do_init(int flags, const char* filename)
+    void LoadEnv::do_init(unsigned short flags, const char* filename)
     {
         std::ifstream file;
         std::string line;
@@ -127,7 +127,7 @@ namespace KingsHeart
 
         if (file)
         {
-            unsigned int i = 1;
+            unsigned short i = 1;
 
             while (getline(file, line))
             {

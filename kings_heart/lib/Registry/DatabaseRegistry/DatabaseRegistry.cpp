@@ -1,22 +1,16 @@
 #include "DatabaseRegistry.hpp"
 
+
 namespace KingsHeart
 {
-    std::unordered_map<std::string, Database> DatabaseRegistry::_registry;
+    DatabaseInstance DatabaseRegistry::_DB{};
 
-    void DatabaseRegistry::add_database(const std::string& key, Database&& database)
-    { _registry.emplace(key, std::move(database)); }
+    extern std::string MAIN_DATABASE_SERVER_URI;
 
-    void DatabaseRegistry::remove_database(const std::string& key)
-    { _registry.erase(key); }
-
-    const Database& DatabaseRegistry::get_database(const std::string& key)
-    {
-        auto it = DatabaseRegistry::_registry.find(key);
-
-        if (it != DatabaseRegistry::_registry.end())
-        { return it->second; }
-        
-        throw std::runtime_error(key + " not found in the Database Registry!");
-    }
+    DatabaseClientPool& DatabaseRegistry::get_database_pool(){
+        static std::string mainServerURI = get_env_var(MAIN_DATABASE_SERVER_URI);
+        static DatabaseURI mainURI{mainServerURI};
+        static DatabaseClientPool mainPool{mainURI};
+        return mainPool;
+    };
 }

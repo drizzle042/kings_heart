@@ -27,5 +27,5 @@ namespace KingsHeart
     { EXPECT_TRUE(_file.get_file_name() == "test1.txt"); }
 
     TEST_F(FileTest, GetTextContent)
-    { EXPECT_TRUE(_file.get_text_content() == _fileContent); }
+    { EXPECT_TRUE(std::string(_file) == _fileContent); }
 }

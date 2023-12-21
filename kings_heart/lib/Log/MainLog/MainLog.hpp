@@ -1,19 +1,15 @@
-#ifndef MainLog_H
-#define MainLog_H
+#ifndef __MainLog_H__
+#define __MainLog_H__
 
 #include <string>
 #include <stdexcept>
+#include "Functions.hpp"
 #include "LoggerRegistry.hpp"
 
 namespace KingsHeart
 {
     class MainLog
     {
-    private:
-        MainLog() =delete;
-        static Logger _logger;
-        static void _set_logger();
-
     public:
         static void trace(const std::string&);
         static void debug(const std::string&);
@@ -21,6 +17,11 @@ namespace KingsHeart
         static void warn(const std::string&);
         static void error(const std::string&);
         static void critical(const std::string&);
+
+    private:
+        MainLog() =delete;
+        static Logger _logger;
+        static void _set_logger();
     };
 }
 

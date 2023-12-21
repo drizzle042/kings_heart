@@ -1,31 +1,27 @@
-#ifndef HttpInput_H
-#define HttpInput_H
+#ifndef __HttpInput_H__
+#define __HttpInput_H__
 
-#include <string>
-#include <string_view>
-#include <vector>
-#include <drogon/HttpRequest.h>
-#include <jsoncpp/json/value.h>
+#include <nlohmann/json.hpp>
 #include "Input.hpp"
-#include "Bagit.hpp"
+#include "Enums.hpp"
 
 
 namespace KingsHeart
 {
-    class HttpInput : public Input
+    template<typename T>
+    class HttpInput : public Input<T>
     {
+    public:
+        explicit HttpInput(const HttpRequest&);
+        const T& operator()() override;
+        HTTP_OUTPUT get_output_type();
+
     private:
         HttpRequest _request;
-        PayloadBuilder _payloadBuilder;
-        std::shared_ptr<Payload> _payload;
-        
-    public:
-        explicit HttpInput(HttpRequest);
-
-        HttpInput& add_required_meta_datum_keys(const std::vector<std::string>&);
-        HttpInput& add_required_message_keys(const std::vector<std::string>&);
-        const Payload& get_input() override;
+        T _input;
     };
 }
+
+#include "HttpInput.tpp"
 
 #endif
