@@ -1,6 +1,7 @@
 #ifndef __RequestAdminOTP_H__
 #define __RequestAdminOTP_H__
 
+#include <future>
 #include <drogon/HttpController.h>
 #include <drogon/HttpTypes.h>
 #include <drogon/utils/FunctionTraits.h>

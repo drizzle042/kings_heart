@@ -3,7 +3,7 @@
 
 namespace KingsHeart
 {
-    std::string get_env_var(const std::string& var, bool required) noexcept(false)
+    std::string get_env_var(const std::string& var, bool required = true) noexcept(false)
     {
         char* env_name = std::getenv(var.c_str());
 
@@ -13,27 +13,31 @@ namespace KingsHeart
         return env_name ? std::string(env_name) : "";
     }
 
-    inja::Environment env_factory()
+    inja::Environment& env_factory()
     {
-        inja::Environment env;
-        env.add_callback(
-                "indent", 1, 
-                [](inja::Arguments& args)
-                {
-                    const inja::json* input = args[0];
-                    uint8_t INDENT_LEVEL = 4;
-                    return input->dump(INDENT_LEVEL);
-                }
-            );
-        env.add_callback(
-                "indent", 2, 
-                [](inja::Arguments& args)
-                {
-                    const inja::json* input = args[0];
-                    uint8_t INDENT_LEVEL = args[1]->get<uint8_t>();
-                    return input->dump(INDENT_LEVEL);
-                }
-            );
+        static inja::Environment env;
+        static int once = []() -> int {
+            env.add_callback(
+                    "indent", 1, 
+                    [](inja::Arguments& args)
+                    {
+                        const inja::json* input = args[0];
+                        uint8_t INDENT_LEVEL = 4;
+                        return input->dump(INDENT_LEVEL);
+                    }
+                );
+            env.add_callback(
+                    "indent", 2, 
+                    [](inja::Arguments& args)
+                    {
+                        const inja::json* input = args[0];
+                        uint8_t INDENT_LEVEL = args[1]->get<uint8_t>();
+                        return input->dump(INDENT_LEVEL);
+                    }
+                );
+            return 0;
+        }();
+
         return env;
     }
 
@@ -66,4 +70,31 @@ namespace KingsHeart
 
         return salt;
     }
+}
+
+namespace KingsHeart
+{
+    const environment_t& get_env_t()
+    {
+        static environment_t values = {
+            get_env_var("Kings_Heart_Main_Logger"),
+            get_env_var("Kings_Heart_Command_Storage_Logger"),
+            get_env_var("Kings_Heart_Command_Storage_Logger_Path"),
+            get_env_var("Kings_Heart_Command_Storage_Logger_Max_File_Size"),
+            get_env_var("Kings_Heart_Command_Storage_Logger_Max_Allowed_Files"),
+            get_env_var("Kings_Heart_Main_Database_Server_URI"),
+            get_env_var("Kings_Heart_Main_Database"),
+            get_env_var("Kings_Heart_Main_Database_Admin_Table"),
+            get_env_var("Kings_Heart_JWT_Secret_Key"),
+            get_env_var("Kings_Heart_JWT_Algorithm"),
+            get_env_var("Kings_Heart_Password_Secret_Key"),
+            get_env_var("Kings_Heart_Password_Algorithm", false),
+            get_env_var("Kings_Heart_Server_Email"),
+            get_env_var("Kings_Heart_Brevo_Email_API"),
+            get_env_var("Kings_Heart_Brevo_Email_API_Key"),
+            get_env_var("Kings_Heart_Default_Response_Template"),
+            get_env_var("Kings_Heart_OTP_Email_Template")
+        };
+        return values;
+    };
 }

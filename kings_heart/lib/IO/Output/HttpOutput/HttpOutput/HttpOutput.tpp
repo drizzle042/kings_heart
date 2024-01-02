@@ -4,13 +4,11 @@
 
 namespace KingsHeart
 {
-    extern std::string DEFAULT_RESPONSE_TEMPLATE;
-
     template<typename T>
     HttpOutput<T>::HttpOutput(const T& payload, HTTP_OUTPUT outputFormat)
     : HttpOutput<T>{
         payload, outputFormat,
-        FileRegistry::get_file(get_env_var(DEFAULT_RESPONSE_TEMPLATE))
+        FileRegistry::get_file(get_env_t().DEFAULT_RESPONSE_TEMPLATE)
       }
     {}
 

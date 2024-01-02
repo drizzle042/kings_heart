@@ -3,16 +3,12 @@
 
 namespace KingsHeart
 {
-    extern std::string JWT_SECRET_KEY;
-    extern std::string JWT_ALGORITHM;
-
     JsonWebToken::JsonWebToken(const std::unordered_map<std::string, std::string>& data)
     : _data{data}
     {
-        static std::string secret = get_env_var(JWT_SECRET_KEY);
-        this->_secretKey = secret;
+        this->_secretKey = get_env_t().JWT_SECRET_KEY;
 
-        static std::string algo = get_env_var(JWT_ALGORITHM);
+        static std::string algo{get_env_t().JWT_ALGORITHM};
         std::transform(algo.begin(), algo.end(), algo.begin(), [](unsigned char c){return std::toupper(c);});
         extern std::unordered_map<std::string, jwt::algorithm> JWT_ALGO;
         this->_algorithm = JWT_ALGO.find(algo) != JWT_ALGO.end() ? JWT_ALGO[algo] : JWT_ALGO["HS512"] ;

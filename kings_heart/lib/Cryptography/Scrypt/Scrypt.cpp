@@ -4,7 +4,6 @@
 namespace KingsHeart
 {
     extern std::unordered_map<HASH_ALGORITHM, std::string> HASH_ALGORITHM_TO_STR;
-    extern std::string PASSWORD_SECRET_KEY;
 
     Scrypt::Scrypt(const std::string& input)
     {

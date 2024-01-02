@@ -5,13 +5,11 @@ namespace KingsHeart
 {
     Logger MainLog::_logger;
 
-    extern std::string MAIN_LOGGER;
-
     void MainLog::_set_logger()
     {
         if (MainLog::_logger == nullptr)
         {
-            static std::string loggerName{get_env_var(MAIN_LOGGER)};
+            static std::string loggerName{get_env_t().MAIN_LOGGER};
             MainLog::_logger = LoggerRegistry::get_logger(loggerName);
             if (MainLog::_logger == nullptr)
             { throw std::runtime_error(loggerName + " is not a logger on this program"); }

@@ -51,7 +51,7 @@ if(BUILD_TESTING)
 endif()
 
 add_subdirectory(admin_app)
-#add_subdirectory(generic_app)
+# add_subdirectory(generic_app)
 add_subdirectory(http1.1_apis)
 add_subdirectory(interfaces)
 add_subdirectory(lib)

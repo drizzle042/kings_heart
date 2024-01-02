@@ -26,7 +26,7 @@ namespace KingsHeart
             std::vector<EmailContact>&&,
             std::string&&,
             std::string&&,
-            std::function<void(drogon::ReqResult, const drogon::HttpResponsePtr&)>
+            std::function<void(drogon::ReqResult, const drogon::HttpResponsePtr&)>&&
         );
         void operator()() override;
 

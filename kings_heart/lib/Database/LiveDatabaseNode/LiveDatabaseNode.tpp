@@ -1,10 +1,8 @@
-#include <iostream>
-
 namespace KingsHeart
 {
 	template<typename T>
-	LiveDatabaseNode<T>::LiveDatabaseNode(const DatabaseInfo &dbInfo)
-	: _dbInfo{dbInfo} {}
+	LiveDatabaseNode<T>::LiveDatabaseNode(const DatabaseInfo& dbInfo)
+	: __dbInfo{dbInfo} {}
 		
 	template<typename T>
 	T LiveDatabaseNode<T>::fetch_one() const
@@ -15,14 +13,17 @@ namespace KingsHeart
 	{
 		DatabaseQueryBuilder Query{queryParams};
 
-		auto result = this->_clientPtr
-					  ->database(this->_dbInfo.database)
-					  .collection(this->_dbInfo.databaseStore)
+		auto result = this->__clientPtr
+					  ->database(this->__dbInfo.database)
+					  .collection(this->__dbInfo.databaseStore)
 					  .find_one(Query());
 
 		T payload;
-		if (result) payload = nlohmann::json::from_bson(result->data(), result->data() + result->length());
-
+		if (result) payload = nlohmann::json::from_bson(
+								result->data(), 
+								result->data() + result->length()
+							);
+		
 		return payload;
 	}
 
@@ -35,9 +36,9 @@ namespace KingsHeart
 	{
 		DatabaseQueryBuilder Query{queryParams};
 
-		auto results = this->_clientPtr
-						   ->database(this->_dbInfo.database)
-						   .collection(this->_dbInfo.databaseStore)
+		auto results = this->__clientPtr
+						   ->database(this->__dbInfo.database)
+						   .collection(this->__dbInfo.databaseStore)
 						   .find(Query());
 
 		std::vector<T> payloads;

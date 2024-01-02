@@ -4,7 +4,6 @@
 namespace KingsHeart
 {
     extern std::unordered_map<std::string, HASH_ALGORITHM> STR_TO_HASH_ALGORITHM;
-    extern std::string PASSWORD_ALGORITHM;
 
     Password::Password(const std::string& input)
     {
@@ -13,7 +12,7 @@ namespace KingsHeart
         if ((pos = input.find("$")) != std::string::npos)
             algorithm = input.substr(0, pos);
 
-        static std::string passwordAlgo = get_env_var(PASSWORD_ALGORITHM, false);
+        static std::string passwordAlgo{get_env_t().PASSWORD_ALGORITHM};
         if (algorithm.empty())
             algorithm = passwordAlgo;
 

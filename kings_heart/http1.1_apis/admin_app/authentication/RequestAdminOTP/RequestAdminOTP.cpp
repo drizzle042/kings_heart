@@ -1,13 +1,14 @@
 #include "RequestAdminOTP.hpp"
-#include <iostream>
+#include "MainLog.hpp"
 
 
 namespace KingsHeart
 {
-    extern std::string OTP_EMAIL_TEMPLATE;
-
-    void notify(drogon::ReqResult, const drogon::HttpResponsePtr& res)
-    { std::cout << res->getBody(); };
+    struct Notify
+    {
+        void operator()(drogon::ReqResult, const drogon::HttpResponsePtr& res)
+        { if(res) MainLog::info(std::string(res->getBody())); };
+    };
 
     void RequestAdminOTP::send_OTP(
         const drogon::HttpRequestPtr& request, 
@@ -19,8 +20,6 @@ namespace KingsHeart
 
         GenerateOTPCommand GenOTP{input};
         const AdminOTP_Output& output = GenOTP();
-
-        static inja::Environment INJA  = env_factory();
         
         if (input.email)
         {
@@ -31,10 +30,10 @@ namespace KingsHeart
 
             std::vector<EmailContact> receipients{{output.admin.first_name, output.admin.contact_email}};
             std::string subject{"OTP Request"};
-            const std::string& fileContent = FileRegistry::get_file(get_env_var(OTP_EMAIL_TEMPLATE));
-            std::string message = INJA.render(fileContent, variables);
+            const std::string& fileContent = FileRegistry::get_file(get_env_t().OTP_EMAIL_TEMPLATE);
+            std::string message = env_factory().render(fileContent, variables);
 
-            EmailMessenger Messenger{std::move(receipients), std::move(subject), std::move(message), &notify};
+            EmailMessenger Messenger{std::move(receipients), std::move(subject), std::move(message), Notify()};
             Messenger();
 
             HttpOutput<Generic_Output> Output{Generic_Output{"success", "Email sent."}, Input.get_output_type()};

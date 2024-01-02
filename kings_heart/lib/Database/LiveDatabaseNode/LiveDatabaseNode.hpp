@@ -4,10 +4,16 @@
 #include <string>
 #include <unordered_map>
 #include <vector>
+#include "bson.hpp"
 #include <nlohmann/json.hpp>
 #include "DatabaseNode.hpp"
 #include "DatabaseRegistry.hpp"
 #include "DatabaseQueryBuilder.hpp"
+
+#include <any>
+#include <fstream>
+#include <iostream>
+#include <chrono>
 
 
 namespace KingsHeart
@@ -25,8 +31,8 @@ namespace KingsHeart
 
     private:
         LiveDatabaseNode() =delete;
-        DatabaseInfo _dbInfo;
-        DatabaseClientPtr _clientPtr = DatabaseRegistry::get_database_pool().acquire();
+        DatabaseInfo __dbInfo;
+        DatabaseClientPtr __clientPtr = DatabaseRegistry::get_database_pool().acquire();
     };
 }
 

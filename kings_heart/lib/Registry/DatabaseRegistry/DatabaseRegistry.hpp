@@ -1,7 +1,6 @@
 #ifndef __DatabaseRegistry_H__
 #define __DatabaseRegistry_H__
 
-#include <string>
 #include "Functions.hpp"
 #include "DatabaseNode.hpp"
 

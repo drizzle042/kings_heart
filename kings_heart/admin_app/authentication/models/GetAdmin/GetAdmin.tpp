@@ -1,7 +1,5 @@
 namespace KingsHeart
 {
-	extern std::string MAIN_DATABASE;
-	extern std::string MAIN_DATABASE_ADMIN_COLLECTION;
 
     template<typename T>
 	GetAdminCommand<T>::GetAdminCommand()
@@ -11,9 +9,10 @@ namespace KingsHeart
     GetAdminCommand<T>::GetAdminCommand(const nlohmann::json& query)
     : __query{&query}
 	{
-		static std::string mainDb = get_env_var(MAIN_DATABASE);
-		static std::string mainDbAdminTable = get_env_var(MAIN_DATABASE_ADMIN_COLLECTION);
-		static DatabaseInfo dbInfo{mainDb, mainDbAdminTable};
+		static DatabaseInfo dbInfo{
+			get_env_t().MAIN_DATABASE,
+			get_env_t().MAIN_DATABASE_ADMIN_COLLECTION
+		};
 
 	    this->__node = std::make_shared<LiveDatabaseNode<T>>(dbInfo);
     }
